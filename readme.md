@@ -9,6 +9,7 @@ Fun with Directus extensions
 | Extension | Type | Sandboxed |
 | --------- | --------- | --------- |
 | [Dynamic JSON](packages/dynamic-json) | Bundle | N/A |
+| [Input with Settings](packages/input-with-settings) | Interface | N/A |
 
 ## Development
 
