@@ -4,7 +4,7 @@ View and copy dynamic JSON data in Directus with unknown schemas (form submissio
 
 ![Formatted View Example](https://raw.githubusercontent.com/bryantgillespie/directus-extensions/main/packages/dynamic-json/docs/dynamic-json-formatted-view.png)
 
-![Tree View Example](https://raw.githubusercontent.com/bryantgillespie/directus-extensions/main/packages/dynamic-json/docs/dynamic-tree-view.png)
+![Tree View Example](https://raw.githubusercontent.com/bryantgillespie/directus-extensions/main/packages/dynamic-json/docs/dynamic-json-tree-view.png)
 
 **Interface**: Full-featured editor with dual view modes
 **Display**: Compact badge for tables with modal viewer
