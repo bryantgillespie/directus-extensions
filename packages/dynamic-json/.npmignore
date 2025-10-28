@@ -1,0 +1,13 @@
+# Source files - only ship dist/
+src/
+*.md
+!README.md
+
+# Development files
+.DS_Store
+tsconfig.json
+node_modules/
+
+# Git
+.git/
+.gitignore

@@ -1,0 +1,91 @@
+services:
+  proxy:
+    container_name: proxy
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    environment:
+      - CADDY_INGRESS_NETWORKS=${COMPOSE_PROJECT_NAME}_sandbox
+    networks:
+      - sandbox
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.local/caddy:/data/tls
+
+  cache:
+    container_name: cache
+    image: redis:6
+    restart: unless-stopped
+    networks:
+      - sandbox
+  database:
+    image: postgis/postgis:13-master
+    platform: linux/amd64
+    volumes:
+      - ./.local/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-p05tgr35}
+      POSTGRES_DB: ${DB_DATABASE:-bry-directus-extensions-db}
+    healthcheck:
+      test: [CMD, pg_isready, -U, '${DB_USER:-postgres}', -d, '${DB_DATABASE:-bry-directus-extensions-db}', -p, '5432', -h, database]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 30s
+    networks:
+      - sandbox
+
+  directus:
+    container_name: directus
+    ports:
+      - 8055:8055
+    image: directus/directus:11.12.0
+    restart: unless-stopped
+    volumes:
+      - ./.local/uploads:/directus/uploads
+      - ./.local/database:/directus/database
+      - ./.local/extensions/.registry:/directus/extensions/.registry
+      - ./packages/directus/extensions
+    networks:
+      - sandbox
+    environment:
+      PUBLIC_URL: 'https://extensions.local'
+      EXTENSIONS_AUTO_RELOAD: true
+      WEBSOCKETS_ENABLED: 'true'
+      MARKETPLACE_TRUST: all
+      SECRET: my-key-is-secret
+
+      ADMIN_EMAIL: admin@directus.dev
+      ADMIN_PASSWORD: password
+
+      REDIS_HOST: cache
+
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: '5432'
+      DB_DATABASE: ${DB_DATABASE:-bry-directus-extensions-db}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-p05tgr35}
+      IMPORT_IP_DENY_LIST: ''
+
+      # Video Player Interface
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: 'https://www.youtube-nocookie.com,https://player.vimeo.com'
+      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC: "array:'self', player.vimeo.com 'unsafe-eval', www.youtube.com 'unsafe-eval', www.youtube.com/iframe_api 'unsafe-eval'"
+      CONTENT_SECURITY_POLICY_DIRECTIVES__IMG_SRC: "array:'self' data:, i.ytimg.com 'unsafe-eval'"
+      CONTENT_SECURITY_POLICY_DIRECTIVES__MEDIA_SRC: "array:'self', cdn.plyr.io"
+
+    depends_on:
+      - database
+      - cache
+    labels:
+      caddy: extensions.local
+      caddy.tls: /data/tls/cert.pem /data/tls/key.pem
+      caddy.reverse_proxy: '{{upstreams 8055}}'
+
+networks:
+  sandbox: {}

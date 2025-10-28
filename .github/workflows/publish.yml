@@ -1,0 +1,151 @@
+name: Publish Extension
+
+on:
+  push:
+    tags:
+      - '*/v*.*.*'  # Matches tags like dynamic-json/v1.0.0
+  workflow_dispatch:
+    inputs:
+      extension:
+        description: 'Extension name (e.g., dynamic-json)'
+        required: true
+        type: string
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (no actual publish)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_OPTIONS: --max_old_space_size=6144
+
+jobs:
+  parse-tag:
+    name: Parse Tag
+    runs-on: ubuntu-latest
+    outputs:
+      extension: ${{ steps.parse.outputs.extension }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag or use manual input
+        id: parse
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "extension=${{ inputs.extension }}" >> $GITHUB_OUTPUT
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            EXTENSION="${TAG%/v*}"
+            VERSION="${TAG#*/v}"
+            echo "extension=$EXTENSION" >> $GITHUB_OUTPUT
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+  publish:
+    name: Build & Publish
+    needs: parse-tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # For changelog generation
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build extension
+        run: |
+          cd packages/${{ needs.parse-tag.outputs.extension }}
+          pnpm run build
+
+      - name: Update package version
+        run: |
+          cd packages/${{ needs.parse-tag.outputs.extension }}
+          npm version ${{ needs.parse-tag.outputs.version }} --no-git-tag-version
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          EXTENSION="${{ needs.parse-tag.outputs.extension }}"
+          VERSION="${{ needs.parse-tag.outputs.version }}"
+
+          # Get previous tag for this extension
+          PREV_TAG=$(git tag -l "${EXTENSION}/v*" --sort=-version:refname | sed -n '2p')
+
+          if [ -z "$PREV_TAG" ]; then
+            # First release - get all commits for this extension
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" -- "packages/${EXTENSION}")
+          else
+            # Get commits since previous tag
+            CHANGELOG=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" -- "packages/${EXTENSION}")
+          fi
+
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="- Initial release"
+          fi
+
+          # Save to file for GitHub release
+          echo "$CHANGELOG" > changelog.txt
+
+          # Also output for use in other steps
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Package extension
+        run: |
+          cd packages/${{ needs.parse-tag.outputs.extension }}
+          tar -czf ../../${{ needs.parse-tag.outputs.extension }}-${{ needs.parse-tag.outputs.version }}.tar.gz dist/ package.json README.md
+
+      - name: Publish to npm
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd packages/${{ needs.parse-tag.outputs.extension }}
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: ${{ !inputs.dry_run && github.event_name == 'push' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.parse-tag.outputs.extension }}/v${{ needs.parse-tag.outputs.version }}
+          name: ${{ needs.parse-tag.outputs.extension }} v${{ needs.parse-tag.outputs.version }}
+          body_path: changelog.txt
+          files: |
+            ${{ needs.parse-tag.outputs.extension }}-${{ needs.parse-tag.outputs.version }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dry run summary
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "## Dry Run Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Extension: ${{ needs.parse-tag.outputs.extension }}" >> $GITHUB_STEP_SUMMARY
+          echo "Version: ${{ needs.parse-tag.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changelog" >> $GITHUB_STEP_SUMMARY
+          cat changelog.txt >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Build successful - no publish performed (dry run)" >> $GITHUB_STEP_SUMMARY

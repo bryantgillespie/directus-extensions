@@ -1,0 +1,25 @@
+name: Enhancement
+description: Suggest an improvement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion!
+  - type: dropdown
+    id: extension
+    attributes:
+      label: Extension
+      description: Which extension does this issue relate to?
+      options:
+{{#extensions}}
+        - {{name}}
+{{/extensions}}
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the Improvement
+      description: A clear and concise description of what the enhancement is. Please include as much detail as you can.
+    validations:
+      required: true

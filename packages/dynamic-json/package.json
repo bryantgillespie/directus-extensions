@@ -1,0 +1,52 @@
+{
+	"name": "directus-dynamic-json",
+	"version": "0.1.0",
+	"description": "A powerful extension bundle for viewing and copying dynamic JSON data in Directus with an unknown schema",
+	"author": "bryantgillespie",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/dynamic-json"
+	},
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-bundle"
+	],
+	"directus:extension": {
+		"type": "bundle",
+		"partial": true,
+		"path": {
+			"app": "dist/app.js",
+			"api": "dist/api.js"
+		},
+		"entries": [
+			{
+				"type": "interface",
+				"name": "dynamic-json-interface",
+				"source": "src/interface/index.ts"
+			},
+			{
+				"type": "display",
+				"name": "dynamic-json-display",
+				"source": "src/display/index.ts"
+			}
+		],
+		"host": "^9.20.4"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"add": "directus-extension add"
+	},
+	"dependencies": {
+		"@directus/format-title": "^12.1.0",
+		"reka-ui": "^2.6.0"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"typescript": "^5.9.3",
+		"vue": "^3.2.41"
+	}
+}

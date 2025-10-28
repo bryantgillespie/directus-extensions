@@ -1,0 +1,14 @@
+formatted_view: Formatted View
+json_data: JSON Data
+keyboard_shortcuts: Keyboard Shortcuts
+navigation: Navigation
+actions: Actions
+tips: Tips
+move_between_controls: Move between controls
+navigate_items: Navigate items (Tree view)
+collapse_expand_items: Collapse/Expand items (Tree view)
+toggle_expand_collapse: Toggle expand/collapse
+view_toggle_tip: Use the view toggle to switch between formatted and tree views
+expand_collapse_tip: Click expand/collapse all buttons to show or hide all sections
+view_preference_saved: Your view preference is saved automatically
+urls_emails_clickable: URLs and email addresses are clickable in both views

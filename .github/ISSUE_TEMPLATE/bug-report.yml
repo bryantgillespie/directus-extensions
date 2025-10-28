@@ -1,0 +1,102 @@
+name: Report a bug
+description: Report an issue with an extension
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue!
+  - type: dropdown
+    id: extension
+    attributes:
+      label: Extension
+      description: Which extension does this issue relate to?
+      options:
+        - Address Completion Interface
+        - AI Alt Text Writer Operation
+        - AI Focal Point Detection Operation
+        - AI Image Generation Operation
+        - AI Image Moderation Operation
+        - AI Researcher Bundle
+        - AI Speech Generation Operation
+        - AI Text Extraction Operation
+        - AI Text Intelligence Operation
+        - AI Transcription Operation
+        - AI Translator Operation
+        - AI Web Scraper Operation
+        - AI Writer Operation
+        - Algolia Operation
+        - API Metric Panel
+        - Audio Player Interface
+        - Calculated Fields Bundle
+        - Card Select Interfaces
+        - Choropleth Map Panel
+        - Collaborative Editing
+        - Command Palette Module
+        - Elasticsearch Operation
+        - Experimental M2A Interface
+        - Field Comments
+        - Flow Trigger Bundle
+        - Funnel Chart Panel
+        - Gantt Chart Layout
+        - GitHub Operation
+        - Hubspot Operation
+        - Inline Repeater Interface
+        - Input Rich Text HTML File Link
+        - Liquidjs Operation
+        - Extension Meter Component
+        - Migration Bundle
+        - Multilevel Autocomplete API Interface
+        - Opensearch Operation
+        - PDF Viewer Interface
+        - Plausible Analytics Bundle
+        - Resend Operation
+        - Rss to JSON Operation
+        - Scatter Plot Panel
+        - SEO Plugin
+        - Simple List Interface
+        - Spreadsheet Layout
+        - Extension Steps Component
+        - Super Header Interface
+        - Switch Interface
+        - Table View Panel
+        - Timeline Chart Panel
+        - Tour Group Interface
+        - Tree View Table Layout
+        - Treemap Chart Panel
+        - Video Player Interface
+        - Whereby Embedded Interface
+        - Whiteboard Interface
+        - YouTube Embed Interface
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: To Reproduce
+      description:
+        Steps to reproduce the behavior. Contributors should be able to follow the steps provided in order to reproduce
+        the bug.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Directus Version
+      placeholder: v10.x.x
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Hosting Strategy
+      options:
+        - Self-Hosted (Docker Image)
+        - Self-Hosted (Custom)
+        - Directus Cloud
+    validations:
+      required: true
