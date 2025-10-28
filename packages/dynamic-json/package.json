@@ -1,6 +1,6 @@
 {
 	"name": "directus-dynamic-json",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "A powerful extension bundle for viewing and copying dynamic JSON data in Directus with an unknown schema",
 	"author": "bryantgillespie",
 	"license": "MIT",
