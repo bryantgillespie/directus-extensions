@@ -2,13 +2,6 @@
 
 Auto-publish workflow for independent extension releases.
 
-## Setup
-
-1. Add `NPM_TOKEN` to GitHub secrets:
-   - Create token at https://www.npmjs.com/settings/bryantgillespie/tokens
-   - Add to repo secrets: Settings → Secrets → Actions → New repository secret
-   - Name: `NPM_TOKEN`
-
 ## Publishing Process
 
 ### Automatic (Git Tags)
