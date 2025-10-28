@@ -79,10 +79,16 @@ jobs:
           cd packages/${{ needs.parse-tag.outputs.extension }}
           pnpm run build
 
-      - name: Update package version
+      - name: Verify package version
         run: |
           cd packages/${{ needs.parse-tag.outputs.extension }}
-          npm version ${{ needs.parse-tag.outputs.version }} --no-git-tag-version
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          if [ "$CURRENT_VERSION" != "${{ needs.parse-tag.outputs.version }}" ]; then
+            echo "Error: package.json version ($CURRENT_VERSION) doesn't match tag version (${{ needs.parse-tag.outputs.version }})"
+            echo "Please update package.json version before tagging"
+            exit 1
+          fi
+          echo "Version verified: $CURRENT_VERSION"
 
       - name: Generate changelog
         id: changelog
