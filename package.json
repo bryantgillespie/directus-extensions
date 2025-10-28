@@ -3,6 +3,10 @@
 	"private": true,
 	"packageManager": "pnpm@9.1.2",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git"
+	},
 	"engines": {
 		"node": ">=18.18.0",
 		"pnpm": "~9"

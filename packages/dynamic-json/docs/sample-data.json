@@ -1,0 +1,306 @@
+{
+	"user": {
+		"id": "usr_8x9k2m4p",
+		"profile": {
+			"firstName": "Elena",
+			"lastName": "Rodriguez",
+			"email": "elena.rodriguez@example.com",
+			"avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+			"verified": true,
+			"createdAt": "2023-01-15T08:30:00Z",
+			"preferences": {
+				"theme": "dark",
+				"notifications": {
+					"email": true,
+					"push": false,
+					"sms": true,
+					"frequency": "daily"
+				},
+				"language": "en-US",
+				"timezone": "America/New_York"
+			}
+		},
+		"subscription": {
+			"plan": "professional",
+			"status": "active",
+			"billing": {
+				"amount": 49.99,
+				"currency": "USD",
+				"interval": "monthly",
+				"nextBillingDate": "2025-11-28T00:00:00Z",
+				"paymentMethod": {
+					"type": "credit_card",
+					"last4": "4242",
+					"brand": "visa",
+					"expiryMonth": 12,
+					"expiryYear": 2026
+				}
+			},
+			"features": [
+				{
+					"name": "Advanced Analytics",
+					"enabled": true,
+					"limit": null
+				},
+				{
+					"name": "Team Collaboration",
+					"enabled": true,
+					"limit": 10
+				},
+				{
+					"name": "API Access",
+					"enabled": true,
+					"limit": 10000
+				}
+			]
+		},
+		"activity": {
+			"lastLogin": "2025-10-27T14:23:18Z",
+			"loginCount": 342,
+			"sessions": [
+				{
+					"id": "sess_9k2x4p8m",
+					"device": "Chrome 119 on macOS",
+					"location": {
+						"city": "New York",
+						"region": "New York",
+						"country": "US",
+						"coordinates": {
+							"latitude": 40.7128,
+							"longitude": -74.0060
+						}
+					},
+					"startedAt": "2025-10-27T14:23:18Z",
+					"active": true
+				},
+				{
+					"id": "sess_7m3n5q9r",
+					"device": "Safari 17 on iPhone",
+					"location": {
+						"city": "Brooklyn",
+						"region": "New York",
+						"country": "US",
+						"coordinates": {
+							"latitude": 40.6782,
+							"longitude": -73.9442
+						}
+					},
+					"startedAt": "2025-10-26T09:15:42Z",
+					"active": false
+				}
+			]
+		},
+		"projects": [
+			{
+				"id": "proj_3k8x2m9p",
+				"name": "Website Redesign",
+				"status": "in_progress",
+				"priority": "high",
+				"team": [
+					{
+						"userId": "usr_4n7k2x8m",
+						"role": "designer",
+						"name": "Marcus Chen",
+						"permissions": ["view", "edit", "comment"]
+					},
+					{
+						"userId": "usr_9p2m5k7x",
+						"role": "developer",
+						"name": "Sarah Kim",
+						"permissions": ["view", "edit", "deploy"]
+					}
+				],
+				"tasks": {
+					"total": 28,
+					"completed": 17,
+					"inProgress": 8,
+					"pending": 3,
+					"breakdown": [
+						{
+							"category": "Design",
+							"count": 12,
+							"items": [
+								{
+									"id": "task_8k3x9m2p",
+									"title": "Create wireframes for homepage",
+									"status": "completed",
+									"assignee": "usr_4n7k2x8m",
+									"dueDate": "2025-10-15",
+									"completedAt": "2025-10-14T16:30:00Z",
+									"tags": ["ui", "homepage", "wireframe"]
+								},
+								{
+									"id": "task_2m9x5k7p",
+									"title": "Design product cards",
+									"status": "in_progress",
+									"assignee": "usr_4n7k2x8m",
+									"dueDate": "2025-10-30",
+									"tags": ["ui", "components", "ecommerce"]
+								}
+							]
+						},
+						{
+							"category": "Development",
+							"count": 16,
+							"items": [
+								{
+									"id": "task_7p3k8x2m",
+									"title": "Implement responsive navigation",
+									"status": "completed",
+									"assignee": "usr_9p2m5k7x",
+									"dueDate": "2025-10-20",
+									"completedAt": "2025-10-19T11:45:00Z",
+									"tags": ["frontend", "responsive", "navigation"]
+								},
+								{
+									"id": "task_5x8k2m9p",
+									"title": "Integrate payment gateway",
+									"status": "pending",
+									"assignee": "usr_9p2m5k7x",
+									"dueDate": "2025-11-05",
+									"tags": ["backend", "payments", "stripe"]
+								}
+							]
+						}
+					]
+				},
+				"metrics": {
+					"performance": {
+						"velocityPerWeek": 3.2,
+						"burndownRate": 0.85,
+						"estimatedCompletion": "2025-11-15"
+					},
+					"quality": {
+						"bugCount": 4,
+						"testCoverage": 87.5,
+						"codeReviewsPending": 2
+					}
+				},
+				"timeline": {
+					"startDate": "2025-09-01",
+					"targetDate": "2025-11-15",
+					"milestones": [
+						{
+							"name": "Design Complete",
+							"date": "2025-10-01",
+							"completed": true
+						},
+						{
+							"name": "Development Phase 1",
+							"date": "2025-10-15",
+							"completed": true
+						},
+						{
+							"name": "Testing & QA",
+							"date": "2025-11-01",
+							"completed": false
+						},
+						{
+							"name": "Launch",
+							"date": "2025-11-15",
+							"completed": false
+						}
+					]
+				}
+			}
+		],
+		"integrations": {
+			"connected": [
+				{
+					"service": "github",
+					"accountId": "bryantgillespie",
+					"scopes": ["repo", "user", "workflow"],
+					"connectedAt": "2024-03-12T10:00:00Z",
+					"lastSync": "2025-10-27T14:00:00Z",
+					"stats": {
+						"repositories": 42,
+						"commits": 1234,
+						"pullRequests": 89
+					}
+				},
+				{
+					"service": "slack",
+					"workspaceId": "T024X7K9PLM",
+					"workspaceName": "My Team",
+					"scopes": ["channels:read", "chat:write", "users:read"],
+					"connectedAt": "2024-05-20T14:30:00Z",
+					"lastSync": "2025-10-27T13:45:00Z",
+					"stats": {
+						"channels": 15,
+						"messages": 5678,
+						"mentions": 234
+					}
+				}
+			],
+			"available": [
+				{
+					"service": "figma",
+					"description": "Design collaboration platform",
+					"features": ["Import designs", "Sync comments", "Track updates"]
+				},
+				{
+					"service": "jira",
+					"description": "Project management tool",
+					"features": ["Sync issues", "Update status", "Track sprints"]
+				}
+			]
+		},
+		"analytics": {
+			"usage": {
+				"last7Days": {
+					"sessions": 12,
+					"totalTime": 14400,
+					"averageSessionDuration": 1200,
+					"pagesViewed": 234,
+					"actionsPerformed": 156
+				},
+				"last30Days": {
+					"sessions": 48,
+					"totalTime": 57600,
+					"averageSessionDuration": 1200,
+					"pagesViewed": 892,
+					"actionsPerformed": 623
+				},
+				"breakdown": [
+					{
+						"date": "2025-10-27",
+						"sessions": 2,
+						"duration": 3600,
+						"actions": ["view_dashboard", "create_project", "edit_task", "upload_file"]
+					},
+					{
+						"date": "2025-10-26",
+						"sessions": 1,
+						"duration": 1800,
+						"actions": ["view_dashboard", "comment_task"]
+					}
+				]
+			},
+			"topFeatures": [
+				{
+					"feature": "Dashboard",
+					"uses": 342,
+					"averageTime": 180
+				},
+				{
+					"feature": "Projects",
+					"uses": 289,
+					"averageTime": 420
+				},
+				{
+					"feature": "Team Collaboration",
+					"uses": 156,
+					"averageTime": 240
+				}
+			]
+		}
+	},
+	"metadata": {
+		"apiVersion": "2.1.0",
+		"requestId": "req_8k2x9m4p5n7q",
+		"timestamp": "2025-10-27T14:23:18.456Z",
+		"processingTime": 42,
+		"cached": false,
+		"dataVersion": 15
+	}
+}
