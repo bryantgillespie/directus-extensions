@@ -29,20 +29,26 @@ jobs:
         run: pnpm install
       - name: Update README
         run: pnpm run readme
-      - name: Commit changes
+      - name: Check for changes
+        id: changes
         run: |
-          git config --local user.name \
-            "github-actions[bot]"
-          git config --local user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff-index --quiet HEAD \
-            || git commit -m "Autocommit: updated at $(date -u)"
-      - name: Commit push and pr
-        uses: golfzaptw/action-commit-push-pr@1.0.2
+          if git diff-index --quiet HEAD --; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
         with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          PREFIX_BRANCHES: chore
-          DEFAULT_BRANCHES: main
-          COMMIT_MESSAGE: Update readme.md
-          TITLE_PR: 'Chore: Update readme.md extensions list'
+          commit-message: Update readme.md and issue templates
+          title: 'Update extension list in readme'
+          body: |
+            Auto-generated update from `pnpm run readme`
+
+            - Updates extension table in readme.md
+            - Updates issue templates with current extensions
+          branch: chore/update-readme
+          delete-branch: true
