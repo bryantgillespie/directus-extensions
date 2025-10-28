@@ -1,12 +1,12 @@
 {
-	"name": "directus-slug-interface",
+	"name": "directus-block-preview-interface",
 	"type": "module",
 	"version": "0.1.0",
-	"description": "Auto-generate URL-friendly slugs from other fields with template support",
+	"description": "Preview landing page blocks while editing - shows live preview of block content",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/bryantgillespie/directus-extensions.git",
-		"directory": "packages/slug-interface"
+		"directory": "packages/block-preview-interface"
 	},
 	"icon": "extension",
 	"keywords": [
@@ -29,8 +29,7 @@
 		"link": "directus-extension link"
 	},
 	"dependencies": {
-		"@sindresorhus/slugify": "^2.2.1",
-		"micromustache": "^8.0.3",
+		"@vueuse/core": "^11.0.0",
 		"vue-i18n": "^10.0.1"
 	},
 	"devDependencies": {

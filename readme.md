@@ -8,8 +8,13 @@ Fun with Directus extensions
 
 | Extension | Type | Sandboxed |
 | --------- | --------- | --------- |
+| [Block Preview](packages/block-preview-interface) | Interface | N/A |
+| [Conditional Interface](packages/conditional-interface) | Interface | N/A |
 | [Dynamic JSON](packages/dynamic-json) | Bundle | N/A |
 | [Input with Settings](packages/input-with-settings) | Interface | N/A |
+| [JSON Form](packages/json-form-interface) | Interface | N/A |
+| [Smart Link](packages/link-interface) | Interface | N/A |
+| [Slug](packages/slug-interface) | Interface | N/A |
 
 ## Development
 

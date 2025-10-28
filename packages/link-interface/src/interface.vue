@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import CollectionSearchCombobox from '../../components/CollectionSearchCombobox.vue';
+import CollectionSearchCombobox from './CollectionSearchCombobox.vue';
 
 interface PageEntity {
 	id: string;
@@ -45,6 +45,18 @@ interface TypeConfig {
 	iconFallback?: string;
 	secondaryField?: string;
 }
+
+const props = withDefaults(defineProps<LinkInterfaceProps>(), {
+	value: null,
+	disabled: false,
+	defaultType: 'page',
+	enabledTypes: () => [],
+	showLabel: true,
+	showOpenInNewTab: true,
+	urlPlaceholder: 'Enter relative (/page) or absolute (https://example.com) URL',
+});
+
+const emit = defineEmits(['input']);
 
 const TYPE_CONFIGS: Record<string, TypeConfig> = {
 	page: {
@@ -99,28 +111,18 @@ export interface LinkInterfaceProps {
 	urlPlaceholder?: string;
 }
 
-const props = withDefaults(defineProps<LinkInterfaceProps>(), {
-	value: null,
-	disabled: false,
-	defaultType: 'page',
-	enabledTypes: () => [],
-	showLabel: true,
-	showOpenInNewTab: true,
-	urlPlaceholder: 'Enter relative (/page) or absolute (https://example.com) URL',
-});
-
-const emit = defineEmits(['input']);
-
 function isValidType(type: string): type is keyof typeof TYPE_CONFIGS {
 	return type in TYPE_CONFIGS;
 }
 
 const currentConfig = computed(() => {
 	const type = linkData.value.type;
+
 	if (!isValidType(type)) {
 		console.warn(`Invalid link type: ${type}. Falling back to default.`);
 		return TYPE_CONFIGS[props.defaultType];
 	}
+
 	return TYPE_CONFIGS[type];
 });
 
@@ -129,15 +131,16 @@ const availableLinkTypes = computed(() => {
 	if (!props.enabledTypes?.length) return allTypes;
 
 	// Validate enabled types
-	const validTypes = props.enabledTypes.filter((type) => {
+	const validTypes = new Set(props.enabledTypes.filter((type) => {
 		if (!isValidType(type)) {
 			console.warn(`Invalid enabled type: ${type}`);
 			return false;
 		}
-		return true;
-	});
 
-	return allTypes.filter((type) => validTypes.includes(type.value));
+		return true;
+	}));
+
+	return allTypes.filter((type) => validTypes.has(type.value));
 });
 
 const selectedItem = computed(() => {
@@ -150,6 +153,7 @@ function createDefaultValue(type: 'page' | 'post' | 'product' | 'url'): LinkData
 	if (type === 'url') {
 		return { type: 'url', url: '', label: '', open_in_new_tab: false };
 	}
+
 	return { type, label: '', open_in_new_tab: false } as LinkData;
 }
 
@@ -199,6 +203,7 @@ function handleSelection(item: any) {
 			label: linkData.value.label,
 			open_in_new_tab: linkData.value.open_in_new_tab,
 		} as LinkData;
+
 		return;
 	}
 
@@ -218,20 +223,24 @@ function handleSelection(item: any) {
 		<!-- Type and Search/URL Row -->
 		<div class="flex-row">
 			<div class="type-section">
-				<div class="field-label">Type</div>
+				<div class="field-label">
+					Type
+				</div>
 				<v-select
 					:model-value="linkData.type"
 					:items="availableLinkTypes"
 					:disabled="disabled"
-					@update:model-value="updateType"
 					placeholder="Select link type..."
 					item-icon="icon"
+					@update:model-value="updateType"
 				/>
 			</div>
 
 			<!-- Collection Search (page, post, product) -->
 			<div v-if="linkData.type !== 'url'" class="search-section">
-				<div class="field-label">{{ currentConfig?.text }}</div>
+				<div class="field-label">
+					{{ currentConfig?.text }}
+				</div>
 				<CollectionSearchCombobox
 					:model-value="selectedItem"
 					:collection="currentConfig?.collection"
@@ -250,7 +259,9 @@ function handleSelection(item: any) {
 
 			<!-- URL Input -->
 			<div v-else class="url-section">
-				<div class="field-label">URL</div>
+				<div class="field-label">
+					URL
+				</div>
 				<v-input
 					:model-value="linkData.url || ''"
 					:placeholder="urlPlaceholder"
@@ -267,7 +278,9 @@ function handleSelection(item: any) {
 		<!-- Label and New Tab Row -->
 		<div class="flex-row align-center">
 			<div v-if="showLabel" class="field-row flex-1">
-				<div class="field-label">Label</div>
+				<div class="field-label">
+					Label
+				</div>
 				<v-input
 					:model-value="linkData.label || ''"
 					placeholder="Link text (optional)"

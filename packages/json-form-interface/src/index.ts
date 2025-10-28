@@ -1,6 +1,5 @@
 import { defineInterface } from '@directus/extensions-sdk';
 import InterfaceComponent from './interface.vue';
-import Options from './options.vue';
 
 export default defineInterface({
 	id: 'json-form',
