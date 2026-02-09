@@ -10,7 +10,6 @@ export default defineInterface({
 	options: ({ collection }) => {
 		return [
 
-
 			{
 				name: '$t:type',
 				field: 'type',
@@ -107,7 +106,7 @@ export default defineInterface({
 					options: {
 						start: 'open',
 					},
-					collection: collection,
+					collection,
 					special: ['group', 'no-data', 'alias'],
 				},
 			},
@@ -151,7 +150,7 @@ export default defineInterface({
 					options: {
 						start: 'closed',
 					},
-					collection: collection,
+					collection,
 					special: ['group', 'no-data', 'alias'],
 				},
 			},

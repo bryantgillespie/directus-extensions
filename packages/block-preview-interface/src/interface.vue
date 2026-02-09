@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, inject, onMounted } from 'vue';
+import { inject, onMounted, ref, watch } from 'vue';
 import Preview from './preview.vue';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
 	baseUrl: 'http://localhost:3000',
-	startCollapsed: false
+	startCollapsed: false,
 });
 const values = inject('values') as any;
 const url = ref('');
@@ -36,26 +36,26 @@ watch(values, () => {
 	}
 }, {
 	deep: true,
-	immediate: false  // Don't trigger on mount
+	immediate: false, // Don't trigger on mount
 });
 </script>
 
 <template>
 	<div class="preview-wrapper" :class="{ 'preview-hidden': isPreviewHidden }">
 		<div v-show="!isPreviewHidden" class="preview-container">
-			<Preview 
-				v-if="url" 
-				:url="url" 
-				:allow-hide="true" 
+			<Preview
+				v-if="url"
+				:url="url"
+				:allow-hide="true"
 				:collection="props.collection"
 				:values="values"
-				@toggle-visibility="isPreviewHidden = !isPreviewHidden" 
+				@toggle-visibility="isPreviewHidden = !isPreviewHidden"
 			/>
 			<div v-else class="placeholder">
 				<v-icon name="info" /> {{ url || 'Loading preview...' }}
 			</div>
 		</div>
-		
+
 		<div v-show="isPreviewHidden" class="collapsed-preview" @click="isPreviewHidden = false">
 			<v-icon name="visibility" />
 			<span>Show Block Preview</span>

@@ -21,10 +21,10 @@ export default defineInterface({
 				interface: 'input',
 				width: 'full',
 				options: {
-					placeholder: 'http://localhost:3000'
+					placeholder: 'http://localhost:3000',
 				},
-				note: 'Base URL for the preview. Defaults to http://localhost:3000 if not provided.'
-			}
+				note: 'Base URL for the preview. Defaults to http://localhost:3000 if not provided.',
+			},
 		},
 		{
 			field: 'startCollapsed',
@@ -34,13 +34,13 @@ export default defineInterface({
 				interface: 'boolean',
 				width: 'half',
 				options: {
-					label: 'Start with preview collapsed'
+					label: 'Start with preview collapsed',
 				},
-				note: 'When enabled, the preview will be hidden by default and can be shown with a button.'
+				note: 'When enabled, the preview will be hidden by default and can be shown with a button.',
 			},
 			schema: {
-				default_value: false
-			}
-		}
+				default_value: false,
+			},
+		},
 	],
 });

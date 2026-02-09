@@ -1,14 +1,13 @@
-
 <script setup lang="ts">
-import ReadOnlyHtml from './read-only-html.vue';
-import { computed } from 'vue';
+import type { Field } from '@directus/types';
 import { useStores } from '@directus/extensions-sdk';
-import { Field } from '@directus/types';
+import { computed } from 'vue';
+import ReadOnlyHtml from './read-only-html.vue';
 
 const props = defineProps<{
 	field: Field;
 	type: string;
-    disabled: boolean;
+	disabled: boolean;
 	interface: string;
 	collection: string;
 	options: Record<string, any>;
@@ -27,17 +26,16 @@ const { hasPermission } = usePermissionsStore();
 
 const canEdit = computed(() => {
 	const edit = hasPermission(props.collection, 'update');
-    return edit;
+	return edit;
 });
 </script>
 
-
 <template>
 	<div :class="[disabled ? 'top-border' : '']">
-        <component :key="`field-${field}`" :value="value" @input="emit('input', $event)" :is="`interface-${interface}`" v-if="!disabled" v-bind="options" />
-        <v-icon v-else-if="interface === 'select-icon' && value" :name="value" x-large />
-        <read-only-html v-else class="readonly-html selectable" :content="value" />
-    </div>
+		<component :is="`interface-${interface}`" v-if="!disabled" :key="`field-${field}`" :value="value" v-bind="options" @input="emit('input', $event)" />
+		<v-icon v-else-if="interface === 'select-icon' && value" :name="value" x-large />
+		<ReadOnlyHtml v-else class="readonly-html selectable" :content="value" />
+	</div>
 </template>
 
 <style scoped>
@@ -47,6 +45,6 @@ const canEdit = computed(() => {
 }
 
 .top-border {
-    border-top: var(--theme--border-width) solid var(--theme--border-color);
+	border-top: var(--theme--border-width) solid var(--theme--border-color);
 }
 </style>

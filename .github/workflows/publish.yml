@@ -3,7 +3,7 @@ name: Publish Extension
 on:
   push:
     tags:
-      - '*/v*.*.*'  # Matches tags like dynamic-json/v1.0.0
+      - '*/v*.*.*' # Matches tags like dynamic-json/v1.0.0
   workflow_dispatch:
     inputs:
       extension:
@@ -15,7 +15,7 @@ on:
         required: true
         type: string
       dry_run:
-        description: 'Dry run (no actual publish)'
+        description: Dry run (no actual publish)
         required: false
         type: boolean
         default: false
@@ -60,7 +60,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # For changelog generation
+          fetch-depth: 0 # For changelog generation
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

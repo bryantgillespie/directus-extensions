@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useElementSize, useEventListener } from '@vueuse/core';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
@@ -39,18 +39,19 @@ const displayHeight = computed(() => deviceMode.value === 'mobile' ? 600 : 800);
 // Calculate optimal scale to fit content in container
 const optimalScale = computed(() => {
 	if (!containerWidth.value || !containerHeight.value) return 1;
-	
+
 	const availableWidth = containerWidth.value - 32; // Account for padding
 	const availableHeight = containerHeight.value - 32;
-	
+
 	const scaleX = availableWidth / contentWidth.value;
 	const scaleY = availableHeight / contentHeight.value;
-	
+
 	if (zoomLevel.value === 'auto') {
 		// Auto mode: fit both width and height (contain behavior)
 		const scale = Math.min(scaleX, scaleY, 1); // Never scale above 1:1
 		return Math.max(scale, 0.1); // Minimum scale of 10%
-	} else {
+	}
+	else {
 		// Fixed zoom level
 		return zoomLevel.value / 100;
 	}
@@ -59,12 +60,12 @@ const optimalScale = computed(() => {
 // Calculate if content will overflow at current zoom level
 const willOverflow = computed(() => {
 	if (zoomLevel.value === 'auto') return false;
-	
+
 	const scaledWidth = contentWidth.value * optimalScale.value;
 	const scaledHeight = contentHeight.value * optimalScale.value;
 	const availableWidth = containerWidth.value - 32;
 	const availableHeight = containerHeight.value - 32;
-	
+
 	return scaledWidth > availableWidth || scaledHeight > availableHeight;
 });
 
@@ -74,25 +75,24 @@ const zoomOptions = [
 	{ text: '25%', value: 25 },
 	{ text: '50%', value: 50 },
 	{ text: '75%', value: 75 },
-	{ text: '100%', value: 100 }
+	{ text: '100%', value: 100 },
 ];
-
 
 function toggleDevice() {
 	deviceMode.value = deviceMode.value === 'mobile' ? 'desktop' : 'mobile';
-	
+
 	// Update content dimensions for new device mode
 	contentWidth.value = displayWidth.value;
 	contentHeight.value = displayHeight.value;
-	
+
 	// Send new width to iframe for responsive changes without refreshing
 	if (frameEl.value?.contentWindow) {
 		frameEl.value.contentWindow.postMessage({
 			type: 'widthUpdate',
 			width: displayWidth.value,
-			deviceMode: deviceMode.value
+			deviceMode: deviceMode.value,
 		}, '*');
-		
+
 		// Request new dimensions after the iframe has time to reflow
 		setTimeout(() => {
 			requestContentDimensions();
@@ -103,7 +103,7 @@ function toggleDevice() {
 function onIframeLoad() {
 	isRefreshing.value = false;
 	requestContentDimensions();
-	
+
 	// Send initial values when iframe loads
 	sendPreviewData();
 }
@@ -115,13 +115,13 @@ function sendPreviewData() {
 	if (previewDataTimeout) {
 		clearTimeout(previewDataTimeout);
 	}
-	
+
 	previewDataTimeout = setTimeout(() => {
 		if (frameEl.value?.contentWindow && props.collection && props.values) {
 			const previewData = {
 				type: 'previewUpdate',
 				collection: props.collection,
-				data: props.values
+				data: props.values,
 			};
 			frameEl.value.contentWindow.postMessage(previewData, '*');
 		}
@@ -131,7 +131,7 @@ function sendPreviewData() {
 function requestContentDimensions() {
 	if (frameEl.value?.contentWindow) {
 		frameEl.value.contentWindow.postMessage({
-			type: 'requestDimensions'
+			type: 'requestDimensions',
 		}, '*');
 	}
 }
@@ -139,12 +139,12 @@ function requestContentDimensions() {
 function refresh() {
 	if (!frameEl.value || isRefreshing.value) return;
 	isRefreshing.value = true;
-	
+
 	// Allow the iframe to refresh without triggering leave dialog
 	frameEl.value.contentWindow?.postMessage({
-		type: 'allowRefresh'
+		type: 'allowRefresh',
 	}, '*');
-	
+
 	// Small delay to ensure message is received before refresh
 	setTimeout(() => {
 		if (frameEl.value) {
@@ -160,7 +160,6 @@ useEventListener(window, 'message', (event) => {
 		contentHeight.value = event.data.height || displayHeight.value;
 	}
 });
-
 
 // Initialize content dimensions based on device mode
 watch(deviceMode, () => {
@@ -192,7 +191,7 @@ watch(() => props.values, (newValues) => {
 					<v-progress-circular v-if="isRefreshing" indeterminate x-small />
 					<v-icon v-else small name="refresh" />
 				</v-button>
-				
+
 				<v-button
 					v-tooltip.bottom="'About Block Preview'"
 					x-small
@@ -204,23 +203,23 @@ watch(() => props.values, (newValues) => {
 					<v-icon small name="help_outline" />
 				</v-button>
 			</div>
-			
+
 			<div class="spacer" />
-			
+
 			<div class="dimensions">
 				<input
 					:value="Math.round(contentWidth)"
 					class="width"
 					readonly
-				/>
+				>
 				<v-icon x-small name="close" />
 				<input
 					:value="Math.round(contentHeight)"
 					class="height"
 					readonly
-				/>
+				>
 			</div>
-			
+
 			<div class="zoom-controls">
 				<v-select
 					v-model="zoomLevel"
@@ -232,7 +231,7 @@ watch(() => props.values, (newValues) => {
 					placement="bottom-start"
 				/>
 			</div>
-			
+
 			<v-button
 				v-tooltip.bottom="t('toggle_device')"
 				x-small
@@ -244,7 +243,7 @@ watch(() => props.values, (newValues) => {
 			>
 				<v-icon small :name="deviceMode === 'mobile' ? 'smartphone' : 'desktop_windows'" />
 			</v-button>
-			
+
 			<v-button
 				v-if="allowHide"
 				v-tooltip.bottom="'Hide Preview'"
@@ -260,13 +259,13 @@ watch(() => props.values, (newValues) => {
 
 		<div ref="containerEl" class="container" :class="{ 'custom-zoom-mode': zoomLevel !== 'auto', 'overflow-content': willOverflow }">
 			<div class="iframe-view">
-				<div 
-					class="viewport" 
+				<div
+					class="viewport"
 					:data-mode="deviceMode"
 					:style="{
 						'--content-width': contentWidth,
 						'--content-height': contentHeight,
-						'--scale': optimalScale
+						'--scale': optimalScale,
 					}"
 				>
 					<iframe
@@ -279,7 +278,7 @@ watch(() => props.values, (newValues) => {
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Help Modal -->
 		<v-dialog v-model="showHelpModal" @esc="showHelpModal = false">
 			<v-card>
@@ -287,12 +286,12 @@ watch(() => props.values, (newValues) => {
 					<v-icon left name="help_outline" />
 					Block Preview
 				</v-card-title>
-				
+
 				<v-card-text>
 					<div class="help-content">
 						<p><strong>What is this?</strong></p>
 						<p>This preview shows how your block will look on the website in real-time as you edit it.</p>
-						
+
 						<p><strong>Features:</strong></p>
 						<ul>
 							<li><strong>Live updates</strong> - Changes appear instantly as you edit fields</li>
@@ -300,7 +299,7 @@ watch(() => props.values, (newValues) => {
 							<li><strong>Smart scaling</strong> - Content automatically scales to fit the preview area ({{ Math.round(optimalScale * 100) }}% currently)</li>
 							<li><strong>Interactive</strong> - You can interact with elements, but navigation is disabled</li>
 						</ul>
-						
+
 						<p><strong>Controls:</strong></p>
 						<ul>
 							<li><v-icon small name="refresh" /> <strong>Refresh</strong> - Reload the preview if something looks wrong</li>
@@ -310,7 +309,7 @@ watch(() => props.values, (newValues) => {
 						</ul>
 					</div>
 				</v-card-text>
-				
+
 				<v-card-actions>
 					<v-spacer />
 					<v-button secondary @click="showHelpModal = false">
@@ -405,11 +404,11 @@ watch(() => props.values, (newValues) => {
 		overflow: hidden; /* Default for auto mode */
 		padding: 0;
 		margin: 0;
-		
+
 		&.custom-zoom-mode {
 			overflow: auto; /* Allow scrolling in custom zoom modes */
 		}
-		
+
 		&.overflow-content {
 			overflow: auto; /* Ensure scrolling when content overflows */
 		}
@@ -424,13 +423,13 @@ watch(() => props.values, (newValues) => {
 		background: var(--theme--background-subdued);
 		position: relative;
 		min-height: 100%;
-		
+
 		.overflow-content & {
 			place-items: start center;
 			padding: 16px;
 		}
 	}
-	
+
 	.viewport {
 		position: relative;
 		width: calc(var(--content-width) * 1px);
@@ -438,14 +437,14 @@ watch(() => props.values, (newValues) => {
 		transform-origin: top left;
 		transform: scale(var(--scale));
 		will-change: transform;
-		
+
 		/* Use Directus theme variables for consistent styling */
 		border: var(--theme--border-width) solid var(--theme--border-color);
 		border-radius: var(--theme--border-radius);
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 		overflow: hidden;
 		background: white;
-		
+
 		/* Center positioning when content fits */
 		.container:not(.overflow-content) & {
 			position: absolute;
@@ -454,7 +453,7 @@ watch(() => props.values, (newValues) => {
 			transform-origin: center;
 			transform: translate(-50%, -50%) scale(var(--scale));
 		}
-		
+
 		iframe {
 			width: 100%;
 			height: 100%;
@@ -492,5 +491,4 @@ watch(() => props.values, (newValues) => {
 		color: var(--theme--foreground);
 	}
 }
-
 </style>

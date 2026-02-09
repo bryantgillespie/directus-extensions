@@ -9,7 +9,7 @@ defineProps<Props>();
 </script>
 
 <template>
-	<div v-if="content" class="wysiwyg-content" v-html="content"></div>
+	<div v-if="content" class="wysiwyg-content" v-html="content" />
 </template>
 
 <style scoped lang="scss">

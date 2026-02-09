@@ -21,13 +21,13 @@ export default defineInterface({
 						{ text: 'Page', value: 'page' },
 						{ text: 'Post', value: 'post' },
 						{ text: 'Product', value: 'product' },
-						{ text: 'URL', value: 'url' }
-					]
-				}
+						{ text: 'URL', value: 'url' },
+					],
+				},
 			},
 			schema: {
-				default_value: 'page'
-			}
+				default_value: 'page',
+			},
 		},
 		{
 			field: 'enabledTypes',
@@ -42,13 +42,13 @@ export default defineInterface({
 						{ text: 'Page', value: 'page' },
 						{ text: 'Post', value: 'post' },
 						{ text: 'Product', value: 'product' },
-						{ text: 'URL', value: 'url' }
-					]
-				}
+						{ text: 'URL', value: 'url' },
+					],
+				},
 			},
 			schema: {
-				default_value: null
-			}
+				default_value: null,
+			},
 		},
 		{
 			field: 'showLabel',
@@ -60,8 +60,8 @@ export default defineInterface({
 				note: 'Whether to show the label input field.',
 			},
 			schema: {
-				default_value: true
-			}
+				default_value: true,
+			},
 		},
 		{
 			field: 'showOpenInNewTab',
@@ -73,8 +73,8 @@ export default defineInterface({
 				note: 'Whether to show the "Open in New Tab" checkbox.',
 			},
 			schema: {
-				default_value: true
-			}
+				default_value: true,
+			},
 		},
 		{
 			field: 'urlPlaceholder',
@@ -86,9 +86,9 @@ export default defineInterface({
 				note: 'Placeholder text for the URL input field.',
 			},
 			schema: {
-				default_value: 'Enter relative (/page) or absolute (https://example.com) URL'
-			}
-		}
+				default_value: 'Enter relative (/page) or absolute (https://example.com) URL',
+			},
+		},
 	],
 	types: ['json'],
 });

@@ -50,7 +50,7 @@ services:
       - ./.local/uploads:/directus/uploads
       - ./.local/database:/directus/database
       - ./.local/extensions/.registry:/directus/extensions/.registry
-      - ./packages/directus/extensions
+      - ./packages/transactions:/directus/extensions/transactions
     networks:
       - sandbox
     environment:

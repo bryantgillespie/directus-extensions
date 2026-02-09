@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { DeepPartial, Field, FieldMeta } from '@directus/types';
 import formatTitle from '@directus/format-title';
-import { DeepPartial, Field, FieldMeta } from '@directus/types';
 import { computed, ref, toRefs } from 'vue';
 
 const props = withDefaults(
@@ -19,7 +19,7 @@ const props = withDefaults(
 	}>(),
 	{
 		fields: () => [],
-	}
+	},
 );
 
 const emit = defineEmits<{
@@ -31,15 +31,15 @@ const { value } = toRefs(props);
 const validationErrors = ref<any[]>([]);
 
 const templateWithDefaults = computed(() =>
-	props.fields?.[0]?.field ? props.template || `{{${props.fields[0].field}}}` : ''
+	props.fields?.[0]?.field ? props.template || `{{${props.fields[0].field}}}` : '',
 );
 
 const isSaveDisabled = computed(() => {
 	for (const field of props.fields) {
 		if (
-			field.meta?.required &&
-			field.field &&
-			(value.value[field.field] === null || value.value[field.field] === undefined)
+			field.meta?.required
+			&& field.field
+			&& (value.value[field.field] === null || value.value[field.field] === undefined)
 		) {
 			return true;
 		}
@@ -66,24 +66,24 @@ const fieldsWithNames = computed(() =>
 			...field,
 			name: formatTitle(field.name ?? field.field!),
 			meta: {
-                interface: field.interface,
+				interface: field.interface,
 				width: field.width,
-                options: field.options,
+				options: field.options,
 			},
 		};
-	})
+	}),
 );
 </script>
 
 <template>
-    <!-- <pre>{{ fieldsWithNames }}</pre> -->
+	<!-- <pre>{{ fieldsWithNames }}</pre> -->
 	<v-form
 		:disabled="disabled"
 		:fields="fieldsWithNames"
 		:model-value="value"
 		:direction="direction"
-		@update:model-value="$emit('input', $event)"
 		:validation-errors="validationErrors"
+		@update:model-value="$emit('input', $event)"
 	/>
 </template>
 

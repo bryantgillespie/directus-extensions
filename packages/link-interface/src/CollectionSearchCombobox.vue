@@ -1,4 +1,15 @@
 <script setup lang="ts">
+import { useApi, useStores } from '@directus/extensions-sdk';
+import { useDebounceFn } from '@vueuse/core';
+import {
+	ComboboxAnchor,
+	ComboboxCancel,
+	ComboboxContent,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxRoot,
+	ComboboxTrigger,
+} from 'reka-ui';
 /**
  * CollectionSearchCombobox - Generic searchable combobox component
  *
@@ -34,18 +45,7 @@
  *
  * The component will use your custom slot if provided, otherwise falls back to prop-based rendering.
  */
-import { ref, computed, watch } from 'vue';
-import { useApi, useStores } from '@directus/extensions-sdk';
-import { useDebounceFn } from '@vueuse/core';
-import {
-	ComboboxRoot,
-	ComboboxAnchor,
-	ComboboxInput,
-	ComboboxContent,
-	ComboboxItem,
-	ComboboxTrigger,
-	ComboboxCancel,
-} from 'reka-ui';
+import { computed, ref, watch } from 'vue';
 
 interface Props {
 	// Current selection (any shape)
@@ -114,18 +114,22 @@ const isStaticMode = computed(() => !!props.staticItems);
 const defaultItemToString = (item: any): string => {
 	if (!item) return '';
 	if (typeof item === 'string') return item;
+
 	if (typeof item === 'object') {
 		// Try common label fields
 		return item.label || item.name || item.title || item.text || String(item.value || item.id || '');
 	}
+
 	return String(item);
 };
 
 const defaultItemToValue = (item: any): any => {
 	if (!item) return null;
+
 	if (typeof item === 'object') {
-		return item.value !== undefined ? item.value : item.id !== undefined ? item.id : item;
+		return item.value !== undefined ? item.value : (item.id !== undefined ? item.id : item);
 	}
+
 	return item;
 };
 
@@ -155,7 +159,7 @@ const selectedItem = computed(() => {
 	if (!props.modelValue) return null;
 
 	// Try to find matching item in results
-	const match = searchResults.value.find(item => isSameItem(item, props.modelValue));
+	const match = searchResults.value.find((item) => isSameItem(item, props.modelValue));
 	return match || props.modelValue;
 });
 
@@ -168,7 +172,7 @@ function filterStaticItems(query: string) {
 	}
 
 	const lowerQuery = query.toLowerCase();
-	return props.staticItems.filter(item => {
+	return props.staticItems.filter((item) => {
 		const itemString = getItemString.value(item).toLowerCase();
 		return itemString.includes(lowerQuery);
 	});
@@ -185,6 +189,7 @@ async function searchCollection(query: string) {
 	if (abortController.value) {
 		abortController.value.abort();
 	}
+
 	abortController.value = new AbortController();
 
 	isSearching.value = true;
@@ -216,20 +221,24 @@ async function searchCollection(query: string) {
 		});
 
 		searchResults.value = response.data.data || [];
-	} catch (error: any) {
+	}
+	catch (error: any) {
 		if (error.name === 'AbortError') {
 			// Request was cancelled, ignore
 			return;
 		}
 
 		console.error('Collection search error:', error);
+
 		notificationsStore.add({
 			title: 'Search Error',
 			text: `Failed to search ${props.collection}`,
 			type: 'danger',
 		});
+
 		searchResults.value = [];
-	} finally {
+	}
+	finally {
 		isSearching.value = false;
 	}
 }
@@ -238,7 +247,8 @@ async function searchCollection(query: string) {
 async function performSearch(query: string) {
 	if (isStaticMode.value) {
 		searchResults.value = filterStaticItems(query);
-	} else if (isCollectionMode.value) {
+	}
+	else if (isCollectionMode.value) {
 		await searchCollection(query);
 	}
 }
@@ -273,11 +283,9 @@ watch(searchQuery, (newQuery) => {
 
 // Watch combobox open/close
 watch(comboboxOpen, (isOpen) => {
-	if (isOpen) {
-		// Only load if we don't have results yet
-		if (searchResults.value.length === 0) {
-			performSearch('');
-		}
+	if (isOpen // Only load if we don't have results yet
+		&& searchResults.value.length === 0) {
+		performSearch('');
 	}
 	// Note: searchQuery reset on close is now handled by reka-ui via resetSearchTermOnBlur prop
 });
@@ -328,9 +336,9 @@ watch(() => props.staticItems, (items) => {
 					<button
 						v-if="clearable && selectedItem"
 						class="clear-button"
-						@click.stop="clearSelection"
 						type="button"
 						:disabled="disabled"
+						@click.stop="clearSelection"
 					>
 						<v-icon name="close" />
 					</button>
@@ -344,7 +352,7 @@ watch(() => props.staticItems, (items) => {
 				<div class="search-input-wrapper">
 					<ComboboxInput
 						v-model="searchQuery"
-						:placeholder="`Search...`"
+						placeholder="Search..."
 						class="combobox-search-input"
 						autofocus
 						@keydown.escape.stop="comboboxOpen = false"
@@ -376,7 +384,7 @@ watch(() => props.staticItems, (items) => {
 								:src="`/assets/${item[imageField]}?width=40&height=40&fit=cover&quality=80`"
 								:alt="getItemString(item)"
 								class="item-thumbnail"
-							/>
+							>
 						</div>
 
 						<!-- Icon fallback if iconFallback is provided and no image -->
