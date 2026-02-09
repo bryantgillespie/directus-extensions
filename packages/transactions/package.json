@@ -1,0 +1,42 @@
+{
+	"name": "directus-extension-transactions",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Run multiple Directus service operations in a single DB transaction",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/transactions"
+	},
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-endpoint"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "endpoint",
+		"path": "dist/index.js",
+		"source": "src/index.ts",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"test": "vitest run",
+		"test:unit": "vitest run test/unit",
+		"test:e2e": "vitest run test/e2e"
+	},
+	"dependencies": {
+		"micromustache": "^8.0.3"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"@directus/types": "^13.0.0",
+		"typescript": "^5.9.3",
+		"vitest": "^3.0.0"
+	}
+}
