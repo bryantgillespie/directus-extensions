@@ -1,0 +1,40 @@
+{
+	"name": "directus-link-interface",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Dynamic link interface that adapts based on link type (Page, Post, Product, or URL)",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/link-interface"
+	},
+	"icon": "extension",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.ts",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"dependencies": {
+		"@vueuse/core": "^11.0.0",
+		"reka-ui": "^2.6.0"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"typescript": "^5.9.3",
+		"vue": "3.5.22"
+	}
+}

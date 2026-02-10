@@ -1,0 +1,39 @@
+{
+	"name": "directus-json-form-interface",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Form interface (similar to Repeater) that stores as JSON object and shows form inline",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/json-form-interface"
+	},
+	"icon": "extension",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.ts",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"dependencies": {
+		"@directus/format-title": "^12.1.0"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"typescript": "^5.9.3",
+		"vue": "3.5.22"
+	}
+}

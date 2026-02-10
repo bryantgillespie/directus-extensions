@@ -1,0 +1,40 @@
+{
+	"name": "directus-block-preview-interface",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Preview landing page blocks while editing - shows live preview of block content",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/block-preview-interface"
+	},
+	"icon": "extension",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.ts",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"dependencies": {
+		"@vueuse/core": "^11.0.0",
+		"vue-i18n": "^10.0.1"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"typescript": "^5.9.3",
+		"vue": "3.5.22"
+	}
+}

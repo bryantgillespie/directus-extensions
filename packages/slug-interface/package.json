@@ -1,0 +1,41 @@
+{
+	"name": "directus-slug-interface",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Auto-generate URL-friendly slugs from other fields with template support",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bryantgillespie/directus-extensions.git",
+		"directory": "packages/slug-interface"
+	},
+	"icon": "extension",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.ts",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"dependencies": {
+		"@sindresorhus/slugify": "^2.2.1",
+		"micromustache": "^8.0.3",
+		"vue-i18n": "^10.0.1"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "16.0.2",
+		"typescript": "^5.9.3",
+		"vue": "3.5.22"
+	}
+}
